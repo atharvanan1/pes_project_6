@@ -32,21 +32,21 @@
  * @file    pes_project_6.c
  * @brief   Application entry point.
  */
-#include <stdio.h>
-#include "board.h"
-#include "peripherals.h"
-#include "pin_mux.h"
-#include "clock_config.h"
-#include "MKL25Z4.h"
-#include "fsl_debug_console.h"
-/* TODO: insert other include files here. */
+#include "main.h"
+;/* TODO: insert other definitions and declarations here. */
+#define DACTASKPERIOD (100 / portTICK_PERIOD_MS)
+#define ADCTASKPERIOD (100 / portTICK_PERIOD_MS)
 
-/* TODO: insert other definitions and declarations here. */
-
+uint16_t buffer[50];
+uint8_t dac_index = 0;
+uint32_t deciseconds = 0;
+TaskHandle_t DAC_Task_Handler = NULL;
 /*
  * @brief   Application entry point.
  */
 int main(void) {
+
+	TimerHandle_t xLoggerTimer;
 
   	/* Init board hardware. */
     BOARD_InitBootPins();
@@ -55,16 +55,33 @@ int main(void) {
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
-    PRINTF("Hello World\n");
+    xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 300, \
+    		NULL, mainQUEUE_RECEIVE_TASK_PRIORITY, DAC_Task_Handler);
 
-    /* Force the counter to be placed into memory. */
-    volatile static int i = 0 ;
-    /* Enter an infinite loop, just incrementing a counter. */
-    while(1) {
-        i++ ;
-        /* 'Dummy' NOP to allow source level single stepping of
-            tight while() loop */
-        __asm volatile ("nop");
-    }
-    return 0 ;
+    xLoggerTimer = xTimerCreate("Logger Timer", (100/ portTICK_PERIOD_MS), pdTRUE, \
+    		(void *)&deciseconds, NULL);
+
+    dac_lookup_init(buffer);
+    dac_init();
+
+    xTimerStart(xLoggerTimer, 0);
+    vTaskStartScheduler();
+    while(1);
+}
+
+void DAC_Task(void* parameters)
+{
+	for(;;)
+	{
+		TickType_t PreviousWakeTime = xTaskGetTickCount();
+		for (;;)
+		{
+			dac_out(*(buffer + dac_index));
+			dac_index++;
+			if(dac_index == 50)
+				dac_index = 0;
+
+			vTaskDelayUntil(&PreviousWakeTime, DACTASKPERIOD);
+		}
+	}
 }
