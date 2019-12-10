@@ -37,11 +37,14 @@
 #define DACTASKPERIOD (100 / portTICK_PERIOD_MS)
 #define ADCTASKPERIOD (100 / portTICK_PERIOD_MS)
 
+uint8_t run_number = 0;
 uint8_t dma_flag = 0;
 uint16_t buffer[50];
 circular_buffer_t* adc_buffer = NULL;
-uint16_t dsp_buffer[64];
+uint16_t dsp_buffer[BUFFER_LENGTH];
 uint8_t dac_index = 0;
+TaskHandle_t DAC_Task_Handler;
+TaskHandle_t ADC_Task_Handler;
 TaskHandle_t DSP_Task_Handler;
 TimerHandle_t xLoggerTimer;
 
@@ -66,17 +69,17 @@ int main(void) {
 #endif
 
     xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 100, \
-    		NULL, 2, NULL);
+    		NULL, (configMAX_PRIORITIES - 1), &DAC_Task_Handler);
     xTaskCreate(ADC_Task, "ADC Task", configMINIMAL_STACK_SIZE + 100, \
-    		NULL, 2, NULL);
+    		NULL, (configMAX_PRIORITIES - 3), &ADC_Task_Handler);
     xTaskCreate(DSP_Task, "DSP Task", configMINIMAL_STACK_SIZE + 500, \
-    		NULL, 2, &DSP_Task_Handler);
+    		NULL, (configMAX_PRIORITIES - 2), &DSP_Task_Handler);
 
     dac_lookup_init(buffer);
     dac_init();
-    adc_buffer = cb_init_buffer(64);
+    adc_buffer = cb_init_buffer(BUFFER_LENGTH);
     adc_init();
-    for(uint8_t index = 0; index < 64; index++)
+    for(uint8_t index = 0; index < BUFFER_LENGTH; index++)
     	dsp_buffer[index] = 0;
     dma_init();
 
@@ -113,7 +116,7 @@ void DAC_Task(void* parameters)
 		if(dac_index == 50)
 			dac_index = 0;
 
-		Toggle_LED(Blue);
+		Toggle_LED(Green);
 		if(logger.Get_Log_Level() == lDebug)
 			logger.Log_Write(__func__, mDebug, "DAC Values %d", *(buffer + dac_index));
 
@@ -128,6 +131,9 @@ void ADC_Task(void* parameters)
 	{
 		if(CB_buffer_full == cb_add_item(adc_buffer, adc_value()))
 		{
+			run_number++;
+			logger.Log_Write(__func__, mStatus, "Run Number %d", run_number);
+			logger.Log_Write(__func__, mStatus, "DMA Transfer Started");
 			dma_transfer(adc_buffer->pointer, dsp_buffer);
 			cb_empty_buffer(adc_buffer);
 		}
@@ -139,14 +145,13 @@ void DSP_Task(void* parameters)
 {
 	for (;;)
 	{
-		Turn_On_LED(Red);
 		uint32_t mean = 0;
 		uint16_t max = 0;
 		uint16_t min = 0xffff;
 		uint32_t standard_deviation = 0;
 		float temp_mean = 0;
 		float temp_sd = 0;
-		for(uint8_t index = 0; index < 64; index++)
+		for(uint8_t index = 0; index < BUFFER_LENGTH; index++)
 		{
 			volatile uint16_t value = *(dsp_buffer + index);
 			mean += value;
@@ -159,21 +164,35 @@ void DSP_Task(void* parameters)
 				max = value;
 			}
 		}
-		temp_mean = mean / 64;
-		for(uint8_t index = 0; index < 64; index++)
+		temp_mean = mean / BUFFER_LENGTH;
+		mean = temp_mean * 100;
+		for(uint8_t index = 0; index < BUFFER_LENGTH; index++)
 		{
 			volatile uint16_t value = *(dsp_buffer + index);
 			temp_sd += pow((value - temp_mean), 2);
+//			logger.Log_Write(__func__, mStatus, "ADC Value - %f", (float) value * 3.3 / 65535);
 		}
-		temp_sd = temp_sd / 64;
+		temp_sd = temp_sd / BUFFER_LENGTH;
 		standard_deviation = temp_sd * 100;
-		Turn_Off_LED(Red);
+//		logger.Log_Write(__func__, mStatus, "Max - %d", max);
+//		logger.Log_Write(__func__, mStatus, "Min - %d", min);
+//		logger.Log_Write(__func__, mStatus, "Mean - %f", temp_mean);
+//		logger.Log_Write(__func__, mStatus, "SD - %f", temp_sd);
+
+		if(run_number == 5)
+		{
+			vTaskDelete(DAC_Task_Handler);
+			vTaskDelete(ADC_Task_Handler);
+			vTaskDelete(DSP_Task_Handler);
+		}
+
 		vTaskSuspend(NULL);
 	}
 }
 
 void DMA_Callback(dma_handle_t *handle, void *param)
 {
+	logger.Log_Write(__func__, mStatus, "DMA Transfer Finished");
 	xTaskResumeFromISR(DSP_Task_Handler);
 	DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE(1);
 }
