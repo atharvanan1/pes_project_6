@@ -1,9 +1,4 @@
-/*
- * main.h
- *
- *  Created on: Dec 8, 2019
- *      Author: athar
- */
+
 
 #ifndef MAIN_H_
 #define MAIN_H_

@@ -7,7 +7,7 @@ source/logger/logger.o source/logger/logger.d: ../source/logger/logger.c \
  ../freertos/portable.h ../freertos/deprecated_definitions.h \
  ../freertos/portmacro.h ../freertos/mpu_wrappers.h ../freertos/task.h \
  ../freertos/list.h ../freertos/queue.h ../freertos/timers.h \
- ../freertos/task.h
+ ../freertos/task.h ../freertos/semphr.h ../freertos/queue.h
 
 ../source/logger/logger.h:
 
@@ -50,3 +50,7 @@ source/logger/logger.o source/logger/logger.d: ../source/logger/logger.c \
 ../freertos/timers.h:
 
 ../freertos/task.h:
+
+../freertos/semphr.h:
+
+../freertos/queue.h:

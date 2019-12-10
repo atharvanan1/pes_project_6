@@ -9,6 +9,7 @@
 #define DAC_DAC_H_
 #include <stdint.h>
 #include "MKL25Z4.h"
+#include "logger.h"
 
 void dac_init(void);
 void dac_out(uint16_t data);

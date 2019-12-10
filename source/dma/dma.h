@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include "fsl_dma.h"
 #include "fsl_dmamux.h"
+#include "logger.h"
 
 #define BUFFER_LENGTH (64)
 #define DMA_CHANNEL (0)

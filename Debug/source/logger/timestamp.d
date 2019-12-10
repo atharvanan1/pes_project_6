@@ -6,7 +6,8 @@ source/logger/timestamp.o source/logger/timestamp.d: \
  ../freertos/projdefs.h ../freertos/portable.h \
  ../freertos/deprecated_definitions.h ../freertos/portmacro.h \
  ../freertos/mpu_wrappers.h ../freertos/task.h ../freertos/list.h \
- ../freertos/queue.h ../freertos/timers.h ../freertos/task.h
+ ../freertos/queue.h ../freertos/timers.h ../freertos/task.h \
+ ../freertos/semphr.h ../freertos/queue.h
 
 ../source/logger/timestamp.h:
 
@@ -45,3 +46,7 @@ source/logger/timestamp.o source/logger/timestamp.d: \
 ../freertos/timers.h:
 
 ../freertos/task.h:
+
+../freertos/semphr.h:
+
+../freertos/queue.h:

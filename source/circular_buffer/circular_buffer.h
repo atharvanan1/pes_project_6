@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "MKL25Z4.h"
+#include "logger.h"
 
 // Macros for Critical Section
 #define START_CRITICAL() 	__disable_irq()

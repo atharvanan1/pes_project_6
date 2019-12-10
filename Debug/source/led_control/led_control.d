@@ -8,7 +8,7 @@ source/led_control/led_control.o source/led_control/led_control.d: \
  ../freertos/portable.h ../freertos/deprecated_definitions.h \
  ../freertos/portmacro.h ../freertos/mpu_wrappers.h ../freertos/task.h \
  ../freertos/list.h ../freertos/queue.h ../freertos/timers.h \
- ../freertos/task.h
+ ../freertos/task.h ../freertos/semphr.h ../freertos/queue.h
 
 ../source/led_control/led_control.h:
 
@@ -53,3 +53,7 @@ source/led_control/led_control.o source/led_control/led_control.d: \
 ../freertos/timers.h:
 
 ../freertos/task.h:
+
+../freertos/semphr.h:
+
+../freertos/queue.h:

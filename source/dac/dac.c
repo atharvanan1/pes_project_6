@@ -9,6 +9,8 @@
 
 void dac_init(void)
 {
+	if(logger.Get_Log_Level() == lDebug)
+		logger.Log_Write(__func__, mDebug, "DAC Initialization Started");
 	SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
 	SIM->SCGC6 |= SIM_SCGC6_DAC0_MASK;
 
@@ -20,6 +22,7 @@ void dac_init(void)
 
 	DAC0->C1 |= DAC_C1_DACBFMD_MASK;
 	DAC0->C2 = 0;
+	logger.Log_Write(__func__, mStatus, "DAC Initialized");
 }
 
 void dac_out(uint16_t data)

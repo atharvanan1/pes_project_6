@@ -9,6 +9,7 @@
 #define LOOKUP_H_
 #include <stdint.h>
 #include <arm_math.h>
+#include "logger.h"
 
 void dac_lookup_init(uint16_t* buffer);
 

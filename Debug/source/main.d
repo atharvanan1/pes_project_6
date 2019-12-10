@@ -7,15 +7,16 @@ source/main.o source/main.d: ../source/main.c ../source/main.h \
  ../drivers/fsl_common.h ../drivers/fsl_gpio.h ../board/peripherals.h \
  ../board/pin_mux.h ../board/clock_config.h ../CMSIS/MKL25Z4.h \
  ../utilities/fsl_debug_console.h ../source/lookup_generator/lookup.h \
- ../CMSIS/arm_math.h ../source/dac/dac.h ../source/adc/adc.h \
- ../source/dma/dma.h ../drivers/fsl_dma.h ../drivers/fsl_dmamux.h \
- ../source/led_control/led_control.h ../source/logger/logger.h \
- ../source/logger/errno.h ../source/logger/timestamp.h \
- ../freertos/FreeRTOS.h ../freertos/FreeRTOSConfig.h \
- ../freertos/projdefs.h ../freertos/portable.h \
- ../freertos/deprecated_definitions.h ../freertos/portmacro.h \
- ../freertos/mpu_wrappers.h ../freertos/task.h ../freertos/list.h \
- ../freertos/queue.h ../freertos/timers.h ../freertos/task.h \
+ ../CMSIS/arm_math.h ../source/logger/logger.h ../source/logger/errno.h \
+ ../source/logger/timestamp.h ../freertos/FreeRTOS.h \
+ ../freertos/FreeRTOSConfig.h ../freertos/projdefs.h \
+ ../freertos/portable.h ../freertos/deprecated_definitions.h \
+ ../freertos/portmacro.h ../freertos/mpu_wrappers.h ../freertos/task.h \
+ ../freertos/list.h ../freertos/queue.h ../freertos/timers.h \
+ ../freertos/task.h ../freertos/semphr.h ../freertos/queue.h \
+ ../source/dac/dac.h ../source/adc/adc.h ../source/dma/dma.h \
+ ../drivers/fsl_dma.h ../drivers/fsl_dmamux.h \
+ ../source/led_control/led_control.h \
  ../source/circular_buffer/circular_buffer.h
 
 ../source/main.h:
@@ -62,18 +63,6 @@ source/main.o source/main.d: ../source/main.c ../source/main.h \
 
 ../CMSIS/arm_math.h:
 
-../source/dac/dac.h:
-
-../source/adc/adc.h:
-
-../source/dma/dma.h:
-
-../drivers/fsl_dma.h:
-
-../drivers/fsl_dmamux.h:
-
-../source/led_control/led_control.h:
-
 ../source/logger/logger.h:
 
 ../source/logger/errno.h:
@@ -103,5 +92,21 @@ source/main.o source/main.d: ../source/main.c ../source/main.h \
 ../freertos/timers.h:
 
 ../freertos/task.h:
+
+../freertos/semphr.h:
+
+../freertos/queue.h:
+
+../source/dac/dac.h:
+
+../source/adc/adc.h:
+
+../source/dma/dma.h:
+
+../drivers/fsl_dma.h:
+
+../drivers/fsl_dmamux.h:
+
+../source/led_control/led_control.h:
 
 ../source/circular_buffer/circular_buffer.h:

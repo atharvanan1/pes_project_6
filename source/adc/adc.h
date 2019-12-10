@@ -9,6 +9,7 @@
 #define ADC_H_
 #include <stdint.h>
 #include "MKL25Z4.h"
+#include "logger.h"
 
 void adc_init(void);
 uint16_t adc_value(void);

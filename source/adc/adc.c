@@ -9,6 +9,8 @@
 
 void adc_init(void)
 {
+	if(logger.Get_Log_Level() == lDebug)
+		logger.Log_Write(__func__, mStatus, "ADC Initialization Started");
 	SIM->SCGC6 |= SIM_SCGC6_ADC0_MASK;
 	PORTE->PCR[20] |= PORT_PCR_MUX(0);
 
@@ -22,6 +24,8 @@ void adc_init(void)
 	ADC0->SC3 |= ADC_SC3_ADCO_MASK |
 			ADC_SC3_AVGE_MASK |
 			ADC_SC3_AVGS(0x00);
+
+	logger.Log_Write(__func__, mStatus, "ADC Initialized");
 }
 
 uint16_t adc_value(void)

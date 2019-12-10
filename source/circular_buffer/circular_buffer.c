@@ -18,6 +18,8 @@
  */
 circular_buffer_t* cb_init_buffer(uint16_t length)
 {
+	if(logger.Get_Log_Level() == lDebug)
+		logger.Log_Write(__func__, mDebug, "Circular Buffer Initialized");
 	// Allocate memory for buffer structure, and memory for buffer
 	circular_buffer_t* buffer_pointer = NULL;
 	buffer_pointer = (circular_buffer_t *) malloc(sizeof(circular_buffer_t));

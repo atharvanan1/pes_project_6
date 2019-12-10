@@ -1,2 +1,2 @@
 dac.c:10:6:dac_init	8	static
-dac.c:25:6:dac_out	16	static
+dac.c:28:6:dac_out	16	static

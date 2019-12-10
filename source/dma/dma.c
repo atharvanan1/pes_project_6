@@ -12,6 +12,8 @@ dma_transfer_config_t dma_tx_struct;
 
 void dma_init(void)
 {
+	if(logger.Get_Log_Level() == lDebug)
+		logger.Log_Write(__func__, mDebug, "DAC Initialization Started");
     /* Configure DMAMUX */
     DMAMUX_Init(DMAMUX0);
     DMAMUX_SetSource(DMAMUX0, DMA_CHANNEL, DMA_SOURCE);
@@ -19,6 +21,8 @@ void dma_init(void)
     /* Configure DMA one shot transfer */
     DMA_Init(DMA0);
     DMA_CreateHandle(&dma_handle, DMA0, DMA_CHANNEL);
+
+    logger.Log_Write(__func__, mStatus, "DMA Initialized");
 }
 
 void dma_transfer(uint16_t* src_buffer, uint16_t* dest_buffer)
