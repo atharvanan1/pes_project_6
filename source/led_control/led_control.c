@@ -13,7 +13,7 @@
  */
 void LED_Init(void)
 {
-	if(Get_Log_Level() == lDebug)
+	if(logger.Get_Log_Level() == lDebug)
 		logger.Log_Write(__func__, mDebug, "Starting LED Initialization");
 
 	// Set up clock for Port peripheral
@@ -27,7 +27,9 @@ void LED_Init(void)
 	// Set data directions, and turn the LEDs off
 	GPIOB->PDDR |= RED_LED | GREEN_LED;
 	GPIOD->PDDR |= BLUE_LED;
-	Turn_Off_LEDs();
+	Turn_Off_LED(Red);
+	Turn_Off_LED(Green);
+	Turn_Off_LED(Blue);
 }
 
 /**
@@ -36,45 +38,54 @@ void LED_Init(void)
  * @param
  * 		LED - color of LED
  */
-void Turn_On(led_color_t LED)
+void Turn_On_LED(led_color_t LED)
 {
-	char* LED_String;
 	switch(LED)
 	{
-	case LED_Red:
+	case Red:
 		GPIOB->PCOR |= RED_LED;			// Turn On
-		LED_String = "Red";
 		break;
-	case LED_Green:
+	case Green:
 		GPIOB->PCOR |= GREEN_LED;		// Turn On
-		LED_String = "Green";
 		break;
-	case LED_Blue:
+	case Blue:
 		GPIOD->PCOR |= BLUE_LED;		// Turn On
-		LED_String = "Blue";
 		break;
 	}
-	logger.Log_Write(__func__, mDebug, "LED %s Turned On", LED_String);
 }
 
 /**
  * Turn_Off_LEDs
  * turns off all LEDs
  */
-void Turn_Off(led_color_t LED)
+void Turn_Off_LED(led_color_t LED)
 {
-	char* LED_String;
 	switch(LED)
 	{
-	case LED_Red:
+	case Red:
 		GPIOB->PSOR |= RED_LED;			// Turn On
 		break;
-	case LED_Green:
+	case Green:
 		GPIOB->PSOR |= GREEN_LED;		// Turn On
 		break;
-	case LED_Blue:
+	case Blue:
 		GPIOD->PSOR |= BLUE_LED;		// Turn On
 		break;
 	}
-	logger.Log_Write(__func__, mDebug, "LED %s Turned On", LED_String);
+}
+
+void Toggle_LED(led_color_t LED)
+{
+	switch(LED)
+	{
+	case Red:
+		GPIOB->PTOR |= RED_LED;			// Turn On
+		break;
+	case Green:
+		GPIOB->PTOR |= GREEN_LED;		// Turn On
+		break;
+	case Blue:
+		GPIOD->PTOR |= BLUE_LED;		// Turn On
+		break;
+	}
 }

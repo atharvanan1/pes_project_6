@@ -19,8 +19,11 @@ board \
 drivers \
 freertos \
 source/adc \
+source/circular_buffer \
 source/dac \
 source/dma \
+source/led_control \
+source/logger \
 source/lookup_generator \
 source \
 startup \

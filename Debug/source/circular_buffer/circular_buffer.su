@@ -1,0 +1,8 @@
+circular_buffer.c:19:20:cb_init_buffer	24	static
+circular_buffer.c:42:13:cb_destroy_buffer	16	static
+circular_buffer.c:60:13:cb_check_full	16	static
+circular_buffer.c:87:13:cb_check_empty	16	static
+circular_buffer.c:116:13:cb_add_item	24	static
+circular_buffer.c:150:13:cb_remove_item	24	static
+circular_buffer.c:183:13:cb_verify_init	16	static
+circular_buffer.c:207:6:cb_empty_buffer	16	static

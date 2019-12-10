@@ -9,6 +9,10 @@
 #define LOGGER_TIMESTAMP_H_
 // Include files
 #include "MKL25Z4.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
 
 // Struct for timestamp information
 typedef struct {
@@ -21,4 +25,5 @@ typedef struct {
 // Prototype Functions
 void vTimestamp_Init(void);
 timestamp_t tTimestamp_Get_Timestamp(void);
+void vLoggerTimerCallback(TimerHandle_t xLoggerTimer);
 #endif /* LOGGER_TIMESTAMP_H_ */

@@ -11,8 +11,9 @@
 // Global deciseconds count
 uint32_t deciseconds = 0;
 
-void tTimestamp_Init(void)
+void vTimestamp_Init(void)
 {
+	TimerHandle_t xLoggerTimer;
     xLoggerTimer = xTimerCreate("Logger Timer", (100/ portTICK_PERIOD_MS), pdTRUE,
     		(void *) 0, vLoggerTimerCallback);
 
@@ -38,7 +39,7 @@ timestamp_t tTimestamp_Get_Timestamp(void)
 	return currentTime;
 }
 
-static void vLoggerTimerCallback(TimerHandle_t xLoggerTimer)
+void vLoggerTimerCallback(TimerHandle_t xLoggerTimer)
 {
 	deciseconds++;
 }

@@ -1,0 +1,4 @@
+logger.c:29:6:Init	8	static
+logger.c:43:6:Log_Write	40	static
+logger.c:95:13:Get_Log_Level	8	static
+logger.c:106:6:Set_Log_Level	16	static

@@ -13,14 +13,12 @@
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "MKL25Z4.h"
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-#include "timers.h"
 #include "fsl_debug_console.h"
 
 #include "dac.h"
 #include "lookup.h"
+#include "led_control.h"
+#include "logger.h"
 
 void DAC_Task(void* parameters);
 

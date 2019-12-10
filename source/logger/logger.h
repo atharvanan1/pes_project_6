@@ -11,14 +11,14 @@
 #define LOGGER_LOGGER_H_
 
 // Include Files
+#include <stdio.h>
 #include <stdint.h>
 #include <errno.h>
 #include <stdarg.h>
 #include "timestamp.h"
-#include "uart.h"
 
 // Log Level and Message Type enums
-typedef enum {lTest, lDebug, lNormal} log_level_t;
+typedef enum {lDebug, lNormal} log_level_t;
 typedef enum {mError, mDebug, mStatus} message_type_t;
 
 // Logger Instance struct

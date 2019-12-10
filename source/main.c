@@ -42,7 +42,6 @@ uint8_t dac_index = 0;
 TaskHandle_t DAC_Task_Handler = NULL;\
 TimerHandle_t xLoggerTimer;
 
-static void vLoggerTimerCallback(TimerHandle_t xLoggerTimer);
 /*
  * @brief   Application entry point.
  */
@@ -54,6 +53,14 @@ int main(void) {
     BOARD_InitBootPeripherals();
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
+
+    logger.Init();
+#ifdef DEBUG_CODE
+    logger.Set_Log_Level(lDebug);
+#else
+    logger.Set_Log_Level(lNormal);
+    LED_Init();
+#endif
 
     xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 500, \
     		NULL, 2, NULL);
@@ -75,6 +82,10 @@ void DAC_Task(void* parameters)
 		dac_index++;
 		if(dac_index == 50)
 			dac_index = 0;
+
+		Toggle_LED(Blue);
+		if(logger.Get_Log_Level() == lDebug)
+			logger.Log_Write(__func__, mDebug, "DAC Values %d", *(buffer + dac_index));
 
 		vTaskDelayUntil(&PreviousWakeTime, DACTASKPERIOD);
 	}

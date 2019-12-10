@@ -11,8 +11,11 @@ RM := rm -rf
 -include utilities/subdir.mk
 -include startup/subdir.mk
 -include source/lookup_generator/subdir.mk
+-include source/logger/subdir.mk
+-include source/led_control/subdir.mk
 -include source/dma/subdir.mk
 -include source/dac/subdir.mk
+-include source/circular_buffer/subdir.mk
 -include source/adc/subdir.mk
 -include source/subdir.mk
 -include freertos/subdir.mk

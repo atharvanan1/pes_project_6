@@ -69,9 +69,6 @@ void Log_Write(const char* function_name, message_type_t message_type, const cha
 	// Log Level Logic
 	switch(thisLogger.Logger_Log_Level)
 	{
-	case lTest:
-		printf("Test:  ");
-		break;
 	case lDebug:
 		printf("Debug: ");
 		break;
@@ -85,7 +82,7 @@ void Log_Write(const char* function_name, message_type_t message_type, const cha
 
 
 	// Message print with color termination code
-	printf(msg, args);
+	vprintf(msg, args);
 	printf("%s\n\r", end);
 }
 

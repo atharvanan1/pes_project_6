@@ -1,0 +1,4 @@
+led_control.c:14:6:LED_Init	8	static
+led_control.c:41:6:Turn_On_LED	16	static
+led_control.c:61:6:Turn_Off_LED	16	static
+led_control.c:77:6:Toggle_LED	16	static

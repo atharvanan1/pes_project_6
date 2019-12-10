@@ -1,0 +1,3 @@
+timestamp.c:14:6:vTimestamp_Init	24	static
+timestamp.c:29:13:tTimestamp_Get_Timestamp	24	static
+timestamp.c:42:6:vLoggerTimerCallback	16	static
