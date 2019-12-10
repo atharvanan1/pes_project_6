@@ -1,11 +1,11 @@
-/**
-  * File Name 		- logger.c
-  * Description 	- contains logger subroutines
-  * Author			- Atharva Nandanwar
-  * Tools			- GNU C Compiler / ARM Compiler Toolchain
-  * Leveraged Code 	- https://github.com/ntpeters/SimpleLogger/
-  * URL				-
-  */
+ /**
+ * File - 	logger.c
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
+ * University of Colorado Boulder
+ * Logger Implemenation
+ */
+
 #include "logger.h"
 
 // Struct for storing logger data

@@ -1,9 +1,9 @@
-/**
- * File - led_control.h
- * Author - Atharva Nandanwar
- * Email - atharva.nandanwar@colorado.edu
- * Principles of Embedded Software
+ /**
+ * File - 	led_control.h
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
  * University of Colorado Boulder
+ * LED Control Library
  */
 #ifndef LED_CONTROL_LED_CONTROL_H_
 #define LED_CONTROL_LED_CONTROL_H_

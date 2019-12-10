@@ -1,9 +1,11 @@
-
- 
-/**
- * @file    pes_project_6.c
- * @brief   Application entry point.
+ /**
+ * File - 	main.c
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
+ * University of Colorado Boulder
+ * Main file
  */
+
 #include "main.h"
 ;/* TODO: insert other definitions and declarations here. */
 #define DACTASKPERIOD (100 / portTICK_PERIOD_MS)
@@ -58,13 +60,13 @@ int main(void) {
     if(logger.Get_Log_Level() == lDebug)
     	logger.Log_Write(__func__, mDebug, "Creating Tasks");
     // DAC Task on Max priority as it is critical to output Sine Wave
-    xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 100, \
+    xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 50, \
     		NULL, (configMAX_PRIORITIES - 1), &DAC_Task_Handler);
     // ADC Task on Minimum priority as it is not so critical task
-    xTaskCreate(ADC_Task, "ADC Task", configMINIMAL_STACK_SIZE + 100, \
+    xTaskCreate(ADC_Task, "ADC Task", configMINIMAL_STACK_SIZE + 200, \
     		NULL, (configMAX_PRIORITIES - 3), &ADC_Task_Handler);
     // DSP Task as it shall run after DMA Transfer is complete
-    xTaskCreate(DSP_Task, "DSP Task", configMINIMAL_STACK_SIZE + 500, \
+    xTaskCreate(DSP_Task, "DSP Task", configMINIMAL_STACK_SIZE + 300, \
     		NULL, (configMAX_PRIORITIES - 2), &DSP_Task_Handler);
 
     // Semaphore Creation
@@ -89,14 +91,16 @@ int main(void) {
     while(1);
 }
 
+/*
+ * Function - DAC_Task
+ * Brief 	- Task for performing DAC operations
+ */
 void DAC_Task(void* parameters)
 {
 	// Tick count used to block the task for certain amount of time
 	TickType_t PreviousWakeTime = xTaskGetTickCount();
 	for (;;)
 	{
-		if(logger.Get_Log_Level() == lDebug)
-			logger.Log_Write(__func__, mDebug, "DAC Task");
 
 		// Output buffer values continuously
 		dac_out(*(buffer + dac_index));
@@ -118,14 +122,17 @@ void DAC_Task(void* parameters)
 	}
 }
 
+
+/*
+ * Function - ADC_Task
+ * Brief 	- Task for performing ADC operations
+ */
 void ADC_Task(void* parameters)
 {
+
 	TickType_t PreviousWakeTime = xTaskGetTickCount();
 	for (;;)
 	{
-		if(logger.Get_Log_Level() == lDebug)
-			logger.Log_Write(__func__, mDebug, "ADC Task");
-
 		// Fill the circular buffer with ADC values
 		if(CB_buffer_full == cb_add_item(adc_buffer, adc_value()))
 		{
@@ -151,12 +158,14 @@ void ADC_Task(void* parameters)
 	}
 }
 
+/*
+ * Function - DSP_Task
+ * Brief 	- Task for performing DSP operations on buffer
+ */
 void DSP_Task(void* parameters)
 {
 	for (;;)
 	{
-		if(logger.Get_Log_Level() == lDebug)
-			logger.Log_Write(__func__, mDebug, "DSP Task");
 
 		// DSP Operations
 		uint32_t mean = 0;
@@ -214,13 +223,28 @@ void DSP_Task(void* parameters)
 	}
 }
 
+/*
+ * Function - DMA_Callback
+ * Brief 	- Function to address DMA Complete Interrupt
+ */
 void DMA_Callback(dma_handle_t *handle, void *param)
 {
+	// Indicate DMA Transfer Complete
 	logger.Log_Write(__func__, mStatus, "DMA Transfer Finished");
+
+	// Resume the DSP Task
 	xTaskResumeFromISR(DSP_Task_Handler);
+
+	// Tell the DMA Peripheral that the Transfer is done
 	DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE(1);
 }
 
+/*
+ * Function - float_string
+ * Parameter - uint32_t value - float * 100 value packed into uint32_t
+ * Brief 	- function to return string output for a packed float value
+ * Return   - Numerical String
+ */
 char* float_string(uint32_t value)
 {
 	// Temporary variable to hold value

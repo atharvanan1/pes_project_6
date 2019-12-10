@@ -1,11 +1,10 @@
-/**
-  * File Name 		- logger.h
-  * Description 	- header file for logger.c
-  * Author			- Atharva Nandanwar
-  * Tools			- GNU C Compiler / ARM Compiler Toolchain
-  * Leveraged Code 	-
-  * URL				-
-  */
+ /**
+ * File - 	logger.h
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
+ * University of Colorado Boulder
+ * Logger Implemenation
+ */
 
 #ifndef LOGGER_LOGGER_H_
 #define LOGGER_LOGGER_H_

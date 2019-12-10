@@ -1,10 +1,11 @@
-/**
- * File - timestamp.h
- * Author - Atharva Nandanwar
- * Email - atharva.nandanwar@colorado.edu
- * Principles of Embedded Software
+ /**
+ * File - 	timestamp.h
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
  * University of Colorado Boulder
+ * Timestamp Header File
  */
+
 #ifndef LOGGER_TIMESTAMP_H_
 #define LOGGER_TIMESTAMP_H_
 // Include files

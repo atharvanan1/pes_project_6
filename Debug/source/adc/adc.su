@@ -1,2 +1,2 @@
-adc.c:10:6:adc_init	8	static
-adc.c:31:10:adc_value	8	static
+adc.c:11:6:adc_init	8	static
+adc.c:32:10:adc_value	8	static

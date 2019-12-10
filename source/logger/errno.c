@@ -1,11 +1,10 @@
-/**
-  * File Name 		- errno.c
-  * Description 	- contains error enums, and related functions
-  * Author			- Atharva Nandanwar
-  * Tools			- GNU C Compiler / ARM Compiler Toolchain
-  * Leveraged Code 	- https://android.googlesource.com/kernel/lk/+/upstream-master/include/errno.h
-  * URL				-
-  */
+ /**
+ * File - 	errno.c
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
+ * University of Colorado Boulder
+ * Error Enum
+ */
 
 #include "errno.h"
 

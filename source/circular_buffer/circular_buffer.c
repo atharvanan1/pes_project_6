@@ -1,9 +1,9 @@
-	/**
- * File - circular_buffer.c
- * Author - Atharva Nandanwar
- * Email - atharva.nandanwar@colorado.edu
- * Principles of Embedded Software
+ /**
+ * File - 	circular_buffer.c
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
  * University of Colorado Boulder
+ * Circular Buffer Implementation
  */
 
 #include "circular_buffer.h"
@@ -202,6 +202,12 @@ CB_status_t cb_verify_init(circular_buffer_t* buffer)
 	return CB_buffer_initialized;
 }
 
+/**
+ * cb_empty_buffer
+ * Empties a circular buffer
+ * @param
+ * 		pointer to circular buffer
+ */
 void cb_empty_buffer(circular_buffer_t* buffer)
 {
 	buffer->count = 0;

@@ -1,9 +1,9 @@
-/**
- * File - timestamp.c
- * Author - Atharva Nandanwar
- * Email - atharva.nandanwar@colorado.edu
- * Principles of Embedded Software
+ /**
+ * File - 	timestamp.c
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
  * University of Colorado Boulder
+ * Timestamp Implementation
  */
 
 #include "timestamp.h"
@@ -11,6 +11,10 @@
 // Global deciseconds count
 uint32_t deciseconds = 0;
 
+/*
+ * vTimestamp_Init
+ * Initializes Time Stamp
+ */
 void vTimestamp_Init(void)
 {
 	TimerHandle_t xLoggerTimer;
@@ -22,7 +26,7 @@ void vTimestamp_Init(void)
 
 /**
  * tTimestamp_Get_Timestamp
- * Gets time stamp data
+ * Gets Time Stamp data
  * @return
  * 		returns a struct with timestamp information
  */
@@ -39,6 +43,12 @@ timestamp_t tTimestamp_Get_Timestamp(void)
 	return currentTime;
 }
 
+/*
+ * vLoggerTimerCallback
+ * Timer callback function
+ * @param
+ * 		xLoggerTimer - timer handle for logger timer
+ */
 void vLoggerTimerCallback(TimerHandle_t xLoggerTimer)
 {
 	deciseconds++;

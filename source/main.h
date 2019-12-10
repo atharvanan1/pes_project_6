@@ -1,7 +1,14 @@
-
+ /**
+ * File - 	main.h
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
+ * University of Colorado Boulder
+ * Main file
+ */
 
 #ifndef MAIN_H_
 #define MAIN_H_
+// Library includes
 #include <stdio.h>
 #include "board.h"
 #include "peripherals.h"
@@ -10,6 +17,7 @@
 #include "MKL25Z4.h"
 #include "fsl_debug_console.h"
 
+// Program Includes
 #include "lookup.h"
 #include "dac.h"
 #include "adc.h"

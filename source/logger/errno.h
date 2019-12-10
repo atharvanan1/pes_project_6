@@ -1,11 +1,10 @@
-/**
-  * File Name 		- errno.h
-  * Description 	- header file for errno.c
-  * Author			- Atharva Nandanwar
-  * Tools			- GNU C Compiler / ARM Compiler Toolchain
-  * Leveraged Code 	-
-  * URL				-
-  */
+ /**
+ * File - 	errno.h
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
+ * University of Colorado Boulder
+ * Error Enum
+ */
 
 #ifndef LOGGER_ERRNO_H_
 #define LOGGER_ERRNO_H_
@@ -13,10 +12,7 @@
 
 // Error/Event Enum
 typedef enum {
-	eUART_Parity_Error = 0x2001,
-	eUART_Framing_Error = 0x2002,
-	eUART_Noise_Error = 0x2003,
-	eUART_Overrun_Error = 0x2004,
+	StartSchedulerError,
 }error_t;
 
 extern error_t errno;

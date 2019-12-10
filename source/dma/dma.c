@@ -1,15 +1,22 @@
-/*
- * dma.c
- *
- *  Created on: Dec 8, 2019
- *      Author: athar
+ /**
+ * File - 	dma.c
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
+ * University of Colorado Boulder
+ * DMA Functions
  */
 
 #include "dma.h"
 
+// DMA Handle for DMA Operation
 dma_handle_t dma_handle;
+// DMA Transfer Configuration for DMA Operation
 dma_transfer_config_t dma_tx_struct;
 
+/**
+ * dma_init
+ * Initializes DMA peripheral
+ */
 void dma_init(void)
 {
 	if(logger.Get_Log_Level() == lDebug)
@@ -25,6 +32,10 @@ void dma_init(void)
     logger.Log_Write(__func__, mStatus, "DMA Initialized");
 }
 
+/**
+ * dma_transfer
+ * Initiates DMA transfer
+ */
 void dma_transfer(uint16_t* src_buffer, uint16_t* dest_buffer)
 {
     DMA_SetCallback(&dma_handle, DMA_Callback, NULL);

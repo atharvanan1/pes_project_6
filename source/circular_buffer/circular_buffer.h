@@ -1,10 +1,11 @@
-/**
- * File - circular_buffer.h
- * Author - Atharva Nandanwar
- * Email - atharva.nandanwar@colorado.edu
- * Principles of Embedded Software
+ /**
+ * File - 	circular_buffer.h
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
  * University of Colorado Boulder
+ * Circular Buffer Implementation
  */
+
 #ifndef CIRCULAR_BUFFER_CIRCULAR_BUFFER_H_
 #define CIRCULAR_BUFFER_CIRCULAR_BUFFER_H_
 

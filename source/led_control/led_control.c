@@ -1,9 +1,9 @@
-/**
- * File - led_control.c
- * Author - Atharva Nandanwar
- * Email - atharva.nandanwar@colorado.edu
- * Principles of Embedded Software
+ /**
+ * File - 	led_control.c
+ * Author-	Atharva Nandanwar
+ * Principles of Embedded Software Project 6
  * University of Colorado Boulder
+ * LED Control Library
  */
 #include "led_control.h"
 
@@ -33,8 +33,8 @@ void LED_Init(void)
 }
 
 /**
- * Turn_On_Only_LED
- * Turns on only specified color LED
+ * Turn_On_LED
+ * Turns on specified color LED
  * @param
  * 		LED - color of LED
  */
@@ -55,8 +55,10 @@ void Turn_On_LED(led_color_t LED)
 }
 
 /**
- * Turn_Off_LEDs
- * turns off all LEDs
+ * Turn_Off_LED
+ * Turns off specified color LED
+ * @param
+ * 		LED - color of LED
  */
 void Turn_Off_LED(led_color_t LED)
 {
@@ -74,6 +76,12 @@ void Turn_Off_LED(led_color_t LED)
 	}
 }
 
+/**
+ * Toggle_LED
+ * Toggled specified color LED
+ * @param
+ * 		LED - color of LED
+ */
 void Toggle_LED(led_color_t LED)
 {
 	switch(LED)
