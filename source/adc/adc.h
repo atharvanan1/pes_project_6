@@ -8,6 +8,9 @@
 #ifndef ADC_H_
 #define ADC_H_
 #include <stdint.h>
+#include "MKL25Z4.h"
 
+void adc_init(void);
+uint16_t adc_value(void);
 
 #endif /* ADC_H_ */

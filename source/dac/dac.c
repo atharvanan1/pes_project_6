@@ -15,8 +15,8 @@ void dac_init(void)
 	PORTE->PCR[30] |= PORT_PCR_MUX(0);
 
 	DAC0->C0 |= DAC_C0_DACEN_MASK |		// Enable the DAC Module
-			DAC_C0_DACTRGSEL_MASK;		// Select software trigger
-	// This setting uses VREFH as the DAC reference voltage
+			DAC_C0_DACTRGSEL_MASK |		// Select software trigger
+			DAC_C0_DACRFS_MASK;			// Selecting VCCA
 
 	DAC0->C1 |= DAC_C1_DACBFMD_MASK;
 	DAC0->C2 = 0;

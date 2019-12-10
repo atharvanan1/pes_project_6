@@ -21,7 +21,7 @@ circular_buffer_t* cb_init_buffer(uint16_t length)
 	// Allocate memory for buffer structure, and memory for buffer
 	circular_buffer_t* buffer_pointer = NULL;
 	buffer_pointer = (circular_buffer_t *) malloc(sizeof(circular_buffer_t));
-	buffer_pointer->pointer = (uint8_t *) malloc(length);
+	buffer_pointer->pointer = (uint16_t *) malloc(length * 2);
 
 	// Set all the parameters
 	buffer_pointer->head = buffer_pointer->pointer;
@@ -113,7 +113,7 @@ CB_status_t cb_check_empty(circular_buffer_t* buffer)
  * @return
  * 		status of operation
  */
-CB_status_t cb_add_item(circular_buffer_t* buffer, uint8_t item)
+CB_status_t cb_add_item(circular_buffer_t* buffer, uint16_t item)
 {
 	// Flag error
 	if(buffer == NULL)
@@ -121,7 +121,6 @@ CB_status_t cb_add_item(circular_buffer_t* buffer, uint8_t item)
 		return CB_buffer_error;
 	}
 
-	START_CRITICAL();
 	// If not full, then update parameters
 	if(cb_check_full(buffer) == CB_buffer_full)
 	{
@@ -134,7 +133,6 @@ CB_status_t cb_add_item(circular_buffer_t* buffer, uint8_t item)
 		buffer->head = (uint32_t) (buffer->head - buffer->pointer) % buffer->length + buffer->pointer;
 		buffer->count += 1;
 	}
-	END_CRITICAL();
 	return CB_buffer_operation_success;
 }
 
@@ -147,7 +145,7 @@ CB_status_t cb_add_item(circular_buffer_t* buffer, uint8_t item)
  * @return
  * 		status of operation
  */
-CB_status_t cb_remove_item(circular_buffer_t* buffer, uint8_t* data)
+CB_status_t cb_remove_item(circular_buffer_t* buffer, uint16_t* data)
 {
 	// Flag error
 	if(buffer == NULL)
@@ -155,7 +153,6 @@ CB_status_t cb_remove_item(circular_buffer_t* buffer, uint8_t* data)
 		return CB_buffer_error;
 	}
 
-	START_CRITICAL();
 	// If not empty, then update parameters
 	if(cb_check_empty(buffer) == CB_buffer_empty)
 	{
@@ -168,7 +165,6 @@ CB_status_t cb_remove_item(circular_buffer_t* buffer, uint8_t* data)
 		buffer->tail = (uint32_t) (buffer->tail - buffer->pointer) % buffer->length + buffer->pointer;
 		buffer->count -= 1;
 	}
-	END_CRITICAL();
 	return CB_buffer_operation_success;
 }
 

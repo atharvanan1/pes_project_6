@@ -32,16 +32,16 @@ typedef enum {
 
 // Structure for circular buffer
 typedef struct {
-	uint8_t* pointer;
-	uint8_t* head;
-	uint8_t* tail;
+	uint16_t* pointer;
+	uint16_t* head;
+	uint16_t* tail;
 	uint16_t length;
 	uint16_t count;
 } circular_buffer_t;
 
 // Prototype functions
-CB_status_t cb_add_item(circular_buffer_t* buffer, uint8_t item);
-CB_status_t cb_remove_item(circular_buffer_t* buffer, uint8_t* data);
+CB_status_t cb_add_item(circular_buffer_t* buffer, uint16_t item);
+CB_status_t cb_remove_item(circular_buffer_t* buffer, uint16_t* data);
 CB_status_t cb_check_full(circular_buffer_t* buffer);
 CB_status_t cb_check_empty(circular_buffer_t* buffer);
 CB_status_t cb_verify_init(circular_buffer_t* buffer);
