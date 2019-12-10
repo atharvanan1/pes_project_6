@@ -21,6 +21,7 @@
 #include "logger.h"
 
 void DAC_Task(void* parameters);
+void vDACTimerCallback(TimerHandle_t xDACTimer);
 
 
 #endif /* MAIN_H_ */

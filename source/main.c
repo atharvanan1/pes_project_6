@@ -41,29 +41,32 @@ uint16_t buffer[50];
 uint8_t dac_index = 0;
 TaskHandle_t DAC_Task_Handler = NULL;\
 TimerHandle_t xLoggerTimer;
+TimerHandle_t xDACTimer;
 
 /*
  * @brief   Application entry point.
  */
 int main(void) {
 
-  	/* Init board hardware. */
-    BOARD_InitBootPins();
+  	/* Init board hardware. */    BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
     logger.Init();
+    LED_Init();
 #ifdef DEBUG_CODE
     logger.Set_Log_Level(lDebug);
 #else
     logger.Set_Log_Level(lNormal);
-    LED_Init();
 #endif
 
-    xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 500, \
-    		NULL, 2, NULL);
+    xDACTimer = xTimerCreate("DAC Timer", (100/ portTICK_PERIOD_MS), pdTRUE,
+    		(void *) 0, vDACTimerCallback);
+
+	if(xTimerStart(xDACTimer, 0) == pdPASS)
+		logger.Log_Write(__func__, mDebug, "Logger Timer");
 
     dac_lookup_init(buffer);
     dac_init();
@@ -73,20 +76,14 @@ int main(void) {
     while(1);
 }
 
-void DAC_Task(void* parameters)
+void vDACTimerCallback(TimerHandle_t xDACTimer)
 {
-	TickType_t PreviousWakeTime = xTaskGetTickCount();
-	for (;;)
-	{
-		dac_out(*(buffer + dac_index));
-		dac_index++;
-		if(dac_index == 50)
-			dac_index = 0;
+	dac_out(*(buffer + dac_index));
+	dac_index++;
+	if(dac_index == 50)
+		dac_index = 0;
 
-		Toggle_LED(Blue);
-		if(logger.Get_Log_Level() == lDebug)
-			logger.Log_Write(__func__, mDebug, "DAC Values %d", *(buffer + dac_index));
-
-		vTaskDelayUntil(&PreviousWakeTime, DACTASKPERIOD);
-	}
+	Toggle_LED(Blue);
+	if(logger.Get_Log_Level() == lDebug)
+		logger.Log_Write(__func__, mDebug, "DAC Values %d", *(buffer + dac_index));
 }
