@@ -37,11 +37,13 @@
 #define DACTASKPERIOD (100 / portTICK_PERIOD_MS)
 #define ADCTASKPERIOD (100 / portTICK_PERIOD_MS)
 
-uint8_t dma_flag = 0;
+uint8_t run_number = 0;
 uint16_t buffer[50];
 circular_buffer_t* adc_buffer = NULL;
 uint16_t dsp_buffer[64];
 uint8_t dac_index = 0;
+TaskHandle_t DAC_Task_Handler;
+TaskHandle_t ADC_Task_Handler;
 TaskHandle_t DSP_Task_Handler;
 TimerHandle_t xLoggerTimer;
 
@@ -66,9 +68,9 @@ int main(void) {
 #endif
 
     xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 100, \
-    		NULL, 2, NULL);
+    		NULL, 2, &DAC_Task_Handler);
     xTaskCreate(ADC_Task, "ADC Task", configMINIMAL_STACK_SIZE + 100, \
-    		NULL, 2, NULL);
+    		NULL, 2, &ADC_Task_Handler);
     xTaskCreate(DSP_Task, "DSP Task", configMINIMAL_STACK_SIZE + 500, \
     		NULL, 2, &DSP_Task_Handler);
 
@@ -79,25 +81,6 @@ int main(void) {
     for(uint8_t index = 0; index < 64; index++)
     	dsp_buffer[index] = 0;
     dma_init();
-
-//    uint16_t data_data = 0;
-//    uint16_t* data = &data_data;
-//    for(uint8_t index = 0; index < 64; index++)
-//    {
-//    	cb_add_item(adc_buffer, 3456+index);
-//    }
-//    for(uint8_t index = 0; index < 64; index++)
-//    {
-//    	cb_remove_item(adc_buffer, data);
-//    	logger.Log_Write(__func__, mStatus, "Value %d", *data);
-//    }
-//    logger.Log_Write(__func__, mStatus, "Size %d", sizeof(adc_buffer->pointer[0]));
-//    dma_transfer(adc_buffer->pointer, dsp_buffer);
-//    while(dma_flag == 0);
-//    for(uint8_t index = 0; index < 64; index++)
-//    {
-//       	logger.Log_Write(__func__, mStatus, "Value %d", dsp_buffer[index]);
-//    }
 
     vTaskStartScheduler();
     while(1);
@@ -113,9 +96,7 @@ void DAC_Task(void* parameters)
 		if(dac_index == 50)
 			dac_index = 0;
 
-		Toggle_LED(Blue);
-		if(logger.Get_Log_Level() == lDebug)
-			logger.Log_Write(__func__, mDebug, "DAC Values %d", *(buffer + dac_index));
+		Toggle_LED(Green);
 
 		vTaskDelayUntil(&PreviousWakeTime, DACTASKPERIOD);
 	}
@@ -128,6 +109,9 @@ void ADC_Task(void* parameters)
 	{
 		if(CB_buffer_full == cb_add_item(adc_buffer, adc_value()))
 		{
+			run_number++;
+			logger.Log_Write(__func__, mStatus, "Run Number %d", run_number);
+			logger.Log_Write(__func__, mStatus, "DMA Transfer Started");
 			dma_transfer(adc_buffer->pointer, dsp_buffer);
 			cb_empty_buffer(adc_buffer);
 		}
@@ -139,7 +123,6 @@ void DSP_Task(void* parameters)
 {
 	for (;;)
 	{
-		Turn_On_LED(Red);
 		uint32_t mean = 0;
 		uint16_t max = 0;
 		uint16_t min = 0xffff;
@@ -156,24 +139,86 @@ void DSP_Task(void* parameters)
 			}
 			if(min > value)
 			{
-				max = value;
+				min  = value;
 			}
 		}
 		temp_mean = mean / 64;
+		mean = temp_mean * 100;
+
 		for(uint8_t index = 0; index < 64; index++)
 		{
 			volatile uint16_t value = *(dsp_buffer + index);
 			temp_sd += pow((value - temp_mean), 2);
 		}
 		temp_sd = temp_sd / 64;
+		temp_sd = sqrt(temp_sd);
 		standard_deviation = temp_sd * 100;
-		Turn_Off_LED(Red);
+
+		char* temp = NULL;
+		logger.Log_Write(__func__, mStatus, "Mean - %s", temp = float_string(mean));
+		if(mean)
+			free(temp);
+		logger.Log_Write(__func__, mStatus, "Max - %d", max);
+		logger.Log_Write(__func__, mStatus, "Min - %d", min);
+		logger.Log_Write(__func__, mStatus, "SD - %s", temp = float_string(standard_deviation));
+		if(mean)
+			free(temp);
+
+		if(run_number == 5)
+		{
+			vTaskDelete(DAC_Task_Handler);
+			vTaskDelete(ADC_Task_Handler);
+			vTaskDelete(DSP_Task_Handler);
+		}
+
 		vTaskSuspend(NULL);
 	}
 }
 
 void DMA_Callback(dma_handle_t *handle, void *param)
 {
+	logger.Log_Write(__func__, mStatus, "DMA Transfer Finished");
 	xTaskResumeFromISR(DSP_Task_Handler);
 	DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE(1);
+}
+
+char* float_string(uint32_t value)
+{
+	uint32_t temp = value;
+	uint8_t buffer[12];
+	uint8_t index = 0;
+	if(value == 0)
+	{
+		return "0.00";
+	}
+	while(temp != 0)
+	{
+		buffer[index] = temp % 10;
+		temp = temp / 10;
+		index++;
+	}
+
+	char* char_buffer = (char *) malloc(sizeof(char) * 13);
+	uint8_t char_index = 0;
+	index--;
+	while(index - char_index >= 2)
+	{
+		*(char_buffer + char_index) = buffer[index - char_index] + '0';
+		char_index++;
+	}
+
+	if(value < 100)
+	{
+		char_buffer[0] = '0';
+		char_index++;
+	}
+
+	*(char_buffer + char_index) = '.';
+	char_index++;
+	*(char_buffer + char_index) = buffer[1] + '0';
+	char_index++;
+	*(char_buffer + char_index) = buffer[0] + '0';
+	char_index++;
+	*(char_buffer + char_index) = 0;
+	return char_buffer;
 }

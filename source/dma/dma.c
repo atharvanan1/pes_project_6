@@ -24,7 +24,7 @@ void dma_init(void)
 void dma_transfer(uint16_t* src_buffer, uint16_t* dest_buffer)
 {
     DMA_SetCallback(&dma_handle, DMA_Callback, NULL);
-    DMA_PrepareTransfer(&dma_tx_struct, src_buffer, sizeof(src_buffer[0]), dest_buffer, sizeof(dest_buffer[0]), sizeof(src_buffer),
+    DMA_PrepareTransfer(&dma_tx_struct, src_buffer, sizeof(src_buffer[0]), dest_buffer, sizeof(dest_buffer[0]), BUFFER_LENGTH * 2,
                         kDMA_MemoryToMemory);
     DMA_SubmitTransfer(&dma_handle, &dma_tx_struct, kDMA_EnableInterrupt);
 	DMA_StartTransfer(&dma_handle);

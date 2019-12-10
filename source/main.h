@@ -26,5 +26,6 @@
 void DAC_Task(void* parameters);
 void ADC_Task(void* parameters);
 void DSP_Task(void* parameters);
+char* float_string(uint32_t value);
 
 #endif /* MAIN_H_ */
