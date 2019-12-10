@@ -39,11 +39,10 @@
 
 uint16_t buffer[50];
 uint8_t dac_index = 0;
-uint32_t deciseconds = 0;
 TaskHandle_t DAC_Task_Handler = NULL;\
 TimerHandle_t xLoggerTimer;
 
-//static void vLoggerTimerCallback(TimerHandle_t xLoggerTimer)
+static void vLoggerTimerCallback(TimerHandle_t xLoggerTimer);
 /*
  * @brief   Application entry point.
  */
@@ -59,13 +58,10 @@ int main(void) {
     xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 500, \
     		NULL, 2, NULL);
 
-//    xLoggerTimer = xTimerCreate("Logger Timer", (100/ portTICK_PERIOD_MS), pdTRUE,
-//    		(void *) 0, xLoggerTimer);
-
     dac_lookup_init(buffer);
     dac_init();
 
-//    xTimerStart(xLoggerTimer, 0);
+
     vTaskStartScheduler();
     while(1);
 }
