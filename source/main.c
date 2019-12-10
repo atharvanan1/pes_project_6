@@ -40,13 +40,14 @@
 uint16_t buffer[50];
 uint8_t dac_index = 0;
 uint32_t deciseconds = 0;
-TaskHandle_t DAC_Task_Handler = NULL;
+TaskHandle_t DAC_Task_Handler = NULL;\
+TimerHandle_t xLoggerTimer;
+
+//static void vLoggerTimerCallback(TimerHandle_t xLoggerTimer)
 /*
  * @brief   Application entry point.
  */
 int main(void) {
-
-	TimerHandle_t xLoggerTimer;
 
   	/* Init board hardware. */
     BOARD_InitBootPins();
@@ -55,16 +56,16 @@ int main(void) {
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
-    xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 300, \
-    		NULL, mainQUEUE_RECEIVE_TASK_PRIORITY, DAC_Task_Handler);
+    xTaskCreate(DAC_Task, "DAC Task", configMINIMAL_STACK_SIZE + 500, \
+    		NULL, 2, NULL);
 
-    xLoggerTimer = xTimerCreate("Logger Timer", (100/ portTICK_PERIOD_MS), pdTRUE, \
-    		(void *)&deciseconds, NULL);
+//    xLoggerTimer = xTimerCreate("Logger Timer", (100/ portTICK_PERIOD_MS), pdTRUE,
+//    		(void *) 0, xLoggerTimer);
 
     dac_lookup_init(buffer);
     dac_init();
 
-    xTimerStart(xLoggerTimer, 0);
+//    xTimerStart(xLoggerTimer, 0);
     vTaskStartScheduler();
     while(1);
 }

@@ -22,5 +22,7 @@
 #include "dac.h"
 #include "lookup.h"
 
+void DAC_Task(void* parameters);
+
 
 #endif /* MAIN_H_ */
