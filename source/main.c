@@ -68,17 +68,14 @@ int main(void) {
 
 void DAC_Task(void* parameters)
 {
-	for(;;)
+	TickType_t PreviousWakeTime = xTaskGetTickCount();
+	for (;;)
 	{
-		TickType_t PreviousWakeTime = xTaskGetTickCount();
-		for (;;)
-		{
-			dac_out(*(buffer + dac_index));
-			dac_index++;
-			if(dac_index == 50)
-				dac_index = 0;
+		dac_out(*(buffer + dac_index));
+		dac_index++;
+		if(dac_index == 50)
+			dac_index = 0;
 
-			vTaskDelayUntil(&PreviousWakeTime, DACTASKPERIOD);
-		}
+		vTaskDelayUntil(&PreviousWakeTime, DACTASKPERIOD);
 	}
 }
